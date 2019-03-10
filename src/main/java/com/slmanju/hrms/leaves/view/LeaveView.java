@@ -1,8 +1,8 @@
 package com.slmanju.hrms.leaves.view;
 
-import com.manjula.eleave.employee.view.EmployeeView;
-import com.manjula.eleave.leaves.model.LeaveStatus;
-import com.manjula.eleave.leaves.model.LeaveType;
+import com.slmanju.hrms.employee.view.EmployeeView;
+import com.slmanju.hrms.leaves.model.LeaveStatus;
+import com.slmanju.hrms.leaves.model.LeaveType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,10 +11,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
+@Data @NoArgsConstructor @AllArgsConstructor @Builder
 public class LeaveView {
 
     private String id;

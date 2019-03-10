@@ -1,31 +1,36 @@
 package com.slmanju.hrms.leaves.service.impl;
 
-import com.manjula.eleave.employee.model.Employee;
-import com.manjula.eleave.employee.service.EmployeeService;
-import com.manjula.eleave.employee.view.EmployeeView;
-import com.manjula.eleave.leaves.model.LeaveEntitlement;
-import com.manjula.eleave.leaves.model.LeaveType;
-import com.manjula.eleave.leaves.repository.LeaveEntitlementRepository;
-import com.manjula.eleave.leaves.service.LeaveEntitlementService;
-import com.manjula.eleave.leaves.service.LeaveService;
-import com.manjula.eleave.leaves.view.LeaveEntitlementView;
+import com.slmanju.hrms.employee.model.Employee;
+import com.slmanju.hrms.employee.service.EmployeeService;
+import com.slmanju.hrms.employee.view.EmployeeView;
+import com.slmanju.hrms.leaves.model.LeaveEntitlement;
+import com.slmanju.hrms.leaves.model.LeaveType;
+import com.slmanju.hrms.leaves.repository.LeaveEntitlementRepository;
+import com.slmanju.hrms.leaves.service.LeaveEntitlementService;
+import com.slmanju.hrms.leaves.view.LeaveEntitlementView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+
+import static java.util.stream.Collectors.toList;
 
 @Service
 @Transactional
 public class LeaveEntitlementServiceImpl implements LeaveEntitlementService {
 
-    private LeaveEntitlementRepository leaveEntitlementRepository;
+    private final LeaveEntitlementRepository leaveEntitlementRepository;
+    private final EmployeeService employeeService;
+
     @Autowired
-    private EmployeeService employeeService;
-    @Autowired
-    private LeaveService leaveService;
-    
+    public LeaveEntitlementServiceImpl(LeaveEntitlementRepository leaveEntitlementRepository,
+                                       EmployeeService employeeService) {
+        this.leaveEntitlementRepository = leaveEntitlementRepository;
+        this.employeeService = employeeService;
+    }
+
     public void saveAllForYear(int year) {
         List<EmployeeView> employeeViews = employeeService.findAll();
         List<LeaveEntitlement> leaveSummaries = new ArrayList<>();
@@ -52,16 +57,7 @@ public class LeaveEntitlementServiceImpl implements LeaveEntitlementService {
     @Override
     public List<LeaveEntitlementView> findByEmployee(String employeeId) {
         List<LeaveEntitlement> entitlements = leaveEntitlementRepository.findByEmployeeId(employeeId);
-        List<LeaveEntitlementView> views = new ArrayList<>();
-        for (LeaveEntitlement leaveEntitlement : entitlements) {
-            views.add(leaveEntitlement.view());
-        }
-        return views;
-    }
-
-    @Autowired
-    public void setLeaveSummaryRepository(LeaveEntitlementRepository leaveSummaryRepository) {
-        this.leaveEntitlementRepository = leaveSummaryRepository;
+        return entitlements.stream().map(LeaveEntitlement::view).collect(toList());
     }
 
 }

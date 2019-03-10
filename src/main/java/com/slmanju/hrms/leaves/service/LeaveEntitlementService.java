@@ -1,6 +1,6 @@
 package com.slmanju.hrms.leaves.service;
 
-import com.manjula.eleave.leaves.view.LeaveEntitlementView;
+import com.slmanju.hrms.leaves.view.LeaveEntitlementView;
 
 import java.util.List;
 

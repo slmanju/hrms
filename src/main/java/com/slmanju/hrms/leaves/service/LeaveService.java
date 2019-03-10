@@ -1,9 +1,9 @@
 package com.slmanju.hrms.leaves.service;
 
-import com.manjula.eleave.employee.view.EmployeeView;
-import com.manjula.eleave.leaves.model.LeaveStatus;
-import com.manjula.eleave.leaves.model.LeaveType;
-import com.manjula.eleave.leaves.view.LeaveView;
+import com.slmanju.hrms.employee.view.EmployeeView;
+import com.slmanju.hrms.leaves.model.LeaveStatus;
+import com.slmanju.hrms.leaves.model.LeaveType;
+import com.slmanju.hrms.leaves.view.LeaveView;
 
 import java.util.List;
 

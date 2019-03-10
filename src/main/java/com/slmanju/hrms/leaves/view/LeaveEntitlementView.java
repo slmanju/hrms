@@ -1,7 +1,7 @@
 package com.slmanju.hrms.leaves.view;
 
-import com.manjula.eleave.employee.view.EmployeeView;
-import com.manjula.eleave.leaves.model.LeaveType;
+import com.slmanju.hrms.employee.view.EmployeeView;
+import com.slmanju.hrms.leaves.model.LeaveType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

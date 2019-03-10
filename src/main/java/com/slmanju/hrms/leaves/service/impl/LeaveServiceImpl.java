@@ -1,32 +1,39 @@
 package com.slmanju.hrms.leaves.service.impl;
 
-import com.manjula.eleave.employee.service.EmployeeService;
-import com.manjula.eleave.employee.view.EmployeeView;
-import com.manjula.eleave.leaves.model.Leave;
-import com.manjula.eleave.leaves.model.LeaveStatus;
-import com.manjula.eleave.leaves.model.LeaveType;
-import com.manjula.eleave.leaves.repository.LeaveRepository;
-import com.manjula.eleave.leaves.service.LeaveService;
-import com.manjula.eleave.leaves.view.LeaveView;
+import com.slmanju.hrms.employee.service.EmployeeService;
+import com.slmanju.hrms.employee.view.EmployeeView;
+import com.slmanju.hrms.leaves.model.Leave;
+import com.slmanju.hrms.leaves.model.LeaveStatus;
+import com.slmanju.hrms.leaves.model.LeaveType;
+import com.slmanju.hrms.leaves.repository.LeaveRepository;
+import com.slmanju.hrms.leaves.service.LeaveService;
+import com.slmanju.hrms.leaves.view.LeaveView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+
+import static java.util.stream.Collectors.toList;
 
 @Service
 @Transactional
 public class LeaveServiceImpl implements LeaveService {
 
-    private LeaveRepository leaveRepository;
+    private final LeaveRepository leaveRepository;
+    private final EmployeeService employeeService;
+
     @Autowired
-    private EmployeeService employeeService;
+    public LeaveServiceImpl(LeaveRepository leaveRepository, EmployeeService employeeService) {
+        this.leaveRepository = leaveRepository;
+        this.employeeService = employeeService;
+    }
 
     @Override
     public void submitLeave(LeaveView view) {
-        EmployeeView employee = employeeService.findById("042d7409-491a-4abe-a7d3-170395420f60");
+        EmployeeView employee = employeeService.findById(view.getId());
         view.setEmployee(employee);
         leaveRepository.save(Leave.valueOf(view));
     }
@@ -39,47 +46,30 @@ public class LeaveServiceImpl implements LeaveService {
     @Override
     public LeaveView getLeave(String id) {
         Optional<Leave> leave = leaveRepository.findById(id);
-        return leave.get().view();
+        return leave.map(Leave::view).orElse(null);
     }
 
     @Override
     public List<LeaveType> getAllLeaveTypes() {
-        return null;
+        return Arrays.stream(LeaveType.values()).collect(toList());
     }
 
     @Override
     public List<LeaveView> getAllLeavesFor(String employeeId) {
         List<Leave> leaves = leaveRepository.findAllByEmployeeId(employeeId);
-        List<LeaveView> views = new ArrayList<>();
-        for (Leave leave : leaves) {
-            views.add(leave.view());
-        }
-        return views;
+        return leaves.stream().map(Leave::view).collect(toList());
     }
 
     @Override
     public List<LeaveView> getAllLeavesFor(String employeeId, LeaveStatus status) {
         List<Leave> leaves = leaveRepository.findAllByEmployeeId(employeeId);
-        List<LeaveView> views = new ArrayList<>();
-        for (Leave leave : leaves) {
-            views.add(leave.view());
-        }
-        return views;
+        return leaves.stream().map(Leave::view).collect(toList());
     }
 
     @Override
     public List<LeaveView> getAllPendingLeaves() {
         List<Leave> leaves = leaveRepository.findAllByStatus(LeaveStatus.PENDING);
-        List<LeaveView> views = new ArrayList<>();
-        for (Leave leave : leaves) {
-            views.add(leave.view());
-        }
-        return views;
-    }
-
-    @Autowired
-    public void setLeaveRepository(LeaveRepository leaveRepository) {
-        this.leaveRepository = leaveRepository;
+        return leaves.stream().map(Leave::view).collect(toList());
     }
 
 }

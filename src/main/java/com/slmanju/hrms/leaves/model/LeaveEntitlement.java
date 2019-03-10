@@ -1,37 +1,25 @@
 package com.slmanju.hrms.leaves.model;
 
-import com.manjula.eleave.employee.model.Employee;
-import com.manjula.eleave.leaves.view.LeaveEntitlementView;
+import com.slmanju.hrms.employee.model.Employee;
+import com.slmanju.hrms.leaves.view.LeaveEntitlementView;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.GenericGenerator;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-import javax.persistence.*;
-
-@Entity
-@Table(name = "el_leave_entitlement")
+@Document("leave_entitlements")
 @Data @NoArgsConstructor @AllArgsConstructor @Builder
 public class LeaveEntitlement {
 
     @Id
-    @Column(name = "id")
-    @GeneratedValue(generator = "uuid")
-    @GenericGenerator(name = "uuid", strategy = "uuid2")
     private String id;
-    @ManyToOne
-    @JoinColumn(name = "employee_id")
     private Employee employee;
-    @Column(name = "leave_type")
-    @Enumerated(EnumType.STRING)
     private LeaveType leaveType;
-    @Column(name = "year")
     private int year;
-    @Column(name = "entitlement_days")
     private int entitlementDays;
-    @Column(name = "taken_days")
     private int takenDays;
     
     public LeaveEntitlementView view() {
